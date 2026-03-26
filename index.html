@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¿Cuán asertiva es tu comunicación con tus clientes?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       RESET & TOKENS DE DISEÑO
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Paleta */
+      --bg:           #f7f6f3;
+      --surface:      #ffffff;
+      --border:       #e8e6e1;
+      --border-focus: #3b7a62;
+      --text-1:       #18181a;
+      --text-2:       #6e6d67;
+      --text-3:       #a8a59d;
+      --accent:       #2c5f4a;
+      --accent-dark:  #1f4535;
+      --accent-soft:  #eaf2ee;
+      --accent-mid:   #4a8c72;
+      /* Tipografía */
+      --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+      --font-body:    'Outfit', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      /* Espaciado y forma */
+      --radius:       14px;
+      --radius-sm:    9px;
+      --shadow:       0 4px 28px rgba(0,0,0,0.07);
+      --shadow-lg:    0 12px 52px rgba(0,0,0,0.11);
+      /* Animación */
+      --ease:         cubic-bezier(0.4, 0, 0.2, 1);
+      --dur:          0.24s;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text-1);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px 88px;
+    }
+
+    /* ============================================================
+       CONTENEDOR PRINCIPAL
+    ============================================================ */
+    .quiz-wrapper {
+      width: 100%;
+      max-width: 640px;
+    }
+
+    /* ============================================================
+       SISTEMA DE PANTALLAS
+    ============================================================ */
+    .screen { display: none; }
+
+    .screen.active {
+      display: block;
+      animation: fadeUp 0.38s var(--ease) forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       PANTALLA 1 — BIENVENIDA
+    ============================================================ */
+    .welcome-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 52px 48px;
+      text-align: center;
+    }
+
+    .chip {
+      display: inline-block;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+
+    .welcome-title {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 5vw, 36px);
+      font-weight: 600;
+      line-height: 1.22;
+      color: var(--text-1);
+      margin-bottom: 16px;
+    }
+
+    .welcome-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .welcome-sub {
+      font-size: 14.5px;
+      color: var(--text-2);
+      line-height: 1.65;
+      margin-bottom: 36px;
+    }
+
+    /* Métricas del test */
+    .metrics {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 40px;
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 18px 8px;
+    }
+
+    .metric {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .metric-val {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-1);
+      line-height: 1;
+    }
+
+    .metric-lbl {
+      font-size: 11.5px;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+    }
+
+    .metric-sep {
+      width: 1px;
+      height: 36px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    /* Campo de nombre */
+    .form-group { text-align: left; margin-bottom: 22px; }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 13px 17px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text-1);
+      background: var(--surface);
+      outline: none;
+      transition: border-color var(--dur) var(--ease),
+                  box-shadow  var(--dur) var(--ease);
+    }
+
+    .form-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(59, 122, 98, 0.13);
+    }
+
+    .form-input.error {
+      border-color: #c0392b;
+      box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.10);
+    }
+
+    .form-input::placeholder { color: var(--text-3); }
+
+    /* Botón principal */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 14px 28px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: background var(--dur) var(--ease),
+                  transform  var(--dur) var(--ease),
+                  box-shadow var(--dur) var(--ease);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+      box-shadow: 0 5px 18px rgba(44, 95, 74, 0.32);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-arrow {
+      display: inline-block;
+      font-size: 17px;
+      line-height: 1;
+      transition: transform var(--dur) var(--ease);
+    }
+
+    .btn-primary:hover .btn-arrow { transform: translateX(5px); }
+
+    /* ============================================================
+       PANTALLA 2 — PREGUNTA
+    ============================================================ */
+
+    /* Barra de progreso */
+    .progress-header { margin-bottom: 18px; }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 9px;
+    }
+
+    .progress-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    .progress-count {
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    .progress-track {
+      height: 2.5px;
+      background: var(--border);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 100px;
+      transition: width 0.5s var(--ease);
+    }
+
+    /* Tarjeta de pregunta */
+    .question-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 40px 40px 36px;
+      animation: fadeUp 0.32s var(--ease) forwards;
+    }
+
+    .q-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .q-text {
+      font-family: var(--font-display);
+      font-size: clamp(17px, 3vw, 21px);
+      font-weight: 600;
+      line-height: 1.48;
+      color: var(--text-1);
+      margin-bottom: 30px;
+    }
+
+    /* Lista de opciones */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      padding: 15px 17px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: border-color var(--dur) var(--ease),
+                  background   var(--dur) var(--ease),
+                  transform    var(--dur) var(--ease);
+    }
+
+    /* Indicador lateral izquierdo */
+    .option-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--dur) var(--ease);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .option-item:hover {
+      border-color: var(--accent-mid);
+      background: var(--accent-soft);
+    }
+
+    .option-item:hover::before { transform: scaleX(1); }
+
+    .option-item.selected {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .option-item.selected::before { transform: scaleX(1); }
+
+    /* Letra de la opción */
+    .opt-marker {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-3);
+      background: var(--bg);
+      transition: all var(--dur) var(--ease);
+    }
+
+    .option-item:hover   .opt-marker,
+    .option-item.selected .opt-marker {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .opt-text {
+      font-size: 14px;
+      line-height: 1.56;
+      color: var(--text-1);
+      padding-top: 3px;
+    }
+
+    /* ============================================================
+       PANTALLA 3 — RESULTADOS
+    ============================================================ */
+    .results-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    /* Cabecera coloreada */
+    .results-header {
+      background: var(--accent);
+      padding: 44px 40px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .res-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      opacity: 0.68;
+      margin-bottom: 6px;
+    }
+
+    .res-name {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: 600;
+      margin-bottom: 28px;
+      line-height: 1.2;
+    }
+
+    .score-wrap {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .score-num {
+      font-family: var(--font-display);
+      font-size: 80px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+
+    .score-of {
+      font-size: 13.5px;
+      opacity: 0.6;
+      margin-top: 5px;
+      letter-spacing: 0.04em;
+    }
+
+    /* Cuerpo de resultados */
+    .results-body {
+      padding: 36px 40px 44px;
+    }
+
+    /* Badge de nivel */
+    .level-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 17px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .level-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .badge-high { background: #e6f4ed; color: #1a6640; }
+    .badge-high .level-dot { background: #1a6640; }
+
+    .badge-mid  { background: #fff6e0; color: #7d5c00; }
+    .badge-mid  .level-dot { background: #d9a000; }
+
+    .badge-low  { background: #fdecea; color: #ac2d1e; }
+    .badge-low  .level-dot { background: #c0392b; }
+
+    .res-feedback {
+      font-size: 15px;
+      line-height: 1.72;
+      color: var(--text-2);
+      margin-bottom: 36px;
+    }
+
+    /* Sección JSON */
+    .json-section { border-top: 1px solid var(--border); padding-top: 28px; }
+
+    .json-title {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 6px;
+    }
+
+    .json-hint {
+      font-size: 12.5px;
+      color: var(--text-3);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    .json-hint strong {
+      color: var(--text-2);
+      font-weight: 500;
+    }
+
+    .json-block {
+      background: #f2f0eb;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 22px;
+      font-family: 'Courier New', 'Lucida Console', Consolas, monospace;
+      font-size: 12.5px;
+      line-height: 1.75;
+      color: var(--text-1);
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    /* Sintaxis JSON */
+    .jk { color: #2c5f4a; }        /* key */
+    .js { color: #8b4513; }        /* string */
+    .jn { color: #1a5fa0; }        /* number */
+    .jp { color: var(--text-3); }  /* punctuation */
+
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: all var(--dur) var(--ease);
+    }
+
+    .copy-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      margin-top: 36px;
+      text-align: center;
+      font-size: 11.5px;
+      color: var(--text-3);
+      letter-spacing: 0.05em;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 520px) {
+      .welcome-card   { padding: 32px 22px 36px; }
+      .question-card  { padding: 28px 20px 28px; }
+      .results-header { padding: 36px 22px; }
+      .results-body   { padding: 26px 22px 32px; }
+      .metrics        { gap: 0; padding: 16px 4px; }
+      .metric-val     { font-size: 24px; }
+      .score-num      { font-size: 64px; }
+      .json-block     { font-size: 11.5px; padding: 16px 16px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="quiz-wrapper">
+
+    <!-- ========================================================
+         PANTALLA 1: BIENVENIDA
+    ========================================================= -->
+    <div id="screen-welcome" class="screen active">
+      <div class="welcome-card">
+        <span class="chip">Evaluación de competencias</span>
+
+        <h1 class="welcome-title">
+          ¿Cuán asertiva es <em>tu comunicación</em><br>con tus clientes?
+        </h1>
+
+        <p class="welcome-sub">
+          Evalúa tu nivel de comunicación asertiva en situaciones reales
+          de atención y venta. Responde con honestidad para obtener un
+          resultado preciso.
+        </p>
+
+        <div class="metrics">
+          <div class="metric">
+            <span class="metric-val">5</span>
+            <span class="metric-lbl">Preguntas</span>
+          </div>
+          <div class="metric-sep"></div>
+          <div class="metric">
+            <span class="metric-val">10</span>
+            <span class="metric-lbl">Puntos</span>
+          </div>
+          <div class="metric-sep"></div>
+          <div class="metric">
+            <span class="metric-val">~3'</span>
+            <span class="metric-lbl">Duración</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="input-name">Tu nombre completo</label>
+          <input
+            class="form-input"
+            type="text"
+            id="input-name"
+            placeholder="Ej.: María García"
+            autocomplete="name"
+            maxlength="80"
+          >
+        </div>
+
+        <button class="btn-primary" onclick="startQuiz()">
+          Iniciar evaluación
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </div><!-- /screen-welcome -->
+
+
+    <!-- ========================================================
+         PANTALLA 2: PREGUNTA
+    ========================================================= -->
+    <div id="screen-question" class="screen">
+
+      <!-- Barra de progreso -->
+      <div class="progress-header">
+        <div class="progress-meta">
+          <span class="progress-tag">Progreso</span>
+          <span class="progress-count" id="progress-count">1 de 5</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Tarjeta dinámica de pregunta -->
+      <div class="question-card" id="question-card">
+        <p class="q-label"  id="q-label">Pregunta 1</p>
+        <p class="q-text"   id="q-text"></p>
+        <div class="options-list" id="options-list"></div>
+      </div>
+
+    </div><!-- /screen-question -->
+
+
+    <!-- ========================================================
+         PANTALLA 3: RESULTADOS
+    ========================================================= -->
+    <div id="screen-results" class="screen">
+      <div class="results-card">
+
+        <!-- Cabecera con puntaje -->
+        <div class="results-header">
+          <p class="res-eyebrow">Resultado de tu evaluación</p>
+          <p class="res-name" id="res-name">—</p>
+          <div class="score-wrap">
+            <span class="score-num" id="res-score">0</span>
+            <span class="score-of">de 10 puntos</span>
+          </div>
+        </div>
+
+        <!-- Cuerpo con nivel y feedback -->
+        <div class="results-body">
+          <div id="level-badge" class="level-badge badge-mid">
+            <span class="level-dot"></span>
+            <span id="level-text">—</span>
+          </div>
+
+          <p class="res-feedback" id="res-feedback"></p>
+
+          <!-- Bloque JSON -->
+          <div class="json-section">
+            <p class="json-title">Datos del resultado · Integración con base de datos</p>
+            <p class="json-hint">
+          
+            <button class="copy-btn" onclick="copyJson()">
+              <span>⎘</span> Copiar JSON
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /screen-results -->
+
+  </div><!-- /quiz-wrapper -->
+
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================= -->
+  <footer class="footer">
+    Autor: Luis Trino Lopera &nbsp;|&nbsp; Responsable de capacitación
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================= -->
+  <script>
+    /* ============================================================
+       BASE DE DATOS: PREGUNTAS
+       Puntuación por opción:
+         2 = correcta (1 por pregunta)
+         1 = parcialmente correcta (2 por pregunta)
+         0 = incorrecta (2 por pregunta)
+       Máximo posible: 5 × 2 = 10 puntos
+    ============================================================ */
+    const QUESTIONS = [
+      {
+        text: "Un cliente expresa insatisfacción con el servicio de manera agresiva. ¿Cómo respondes?",
+        options: [
+          { text: "Escuchas activamente, validas su emoción y propones una solución concreta", score: 2 },
+          { text: "Le dices que tiene razón en todo para calmarlo cuanto antes", score: 1 },
+          { text: "Le ofreces una compensación sin escuchar el problema completo", score: 1 },
+          { text: "Le explicas por qué el problema no fue responsabilidad tuya", score: 0 },
+          { text: "Te muestras distante y muy profesional para que no te afecte emocionalmente", score: 0 }
+        ]
+      },
+      {
+        text: "Debes presentar un precio que el cliente considera elevado. ¿Qué haces?",
+        options: [
+          { text: "Justificas el valor con beneficios concretos y escuchas sus objeciones con calma", score: 2 },
+          { text: "Preguntas qué presupuesto tiene para explorar alternativas dentro de tu oferta", score: 1 },
+          { text: "Destacas las ventajas comparativas frente a opciones más económicas del mercado", score: 1 },
+          { text: "Bajas el precio de inmediato para no perder la venta", score: 0 },
+          { text: "Informas que el precio es fijo y no admite negociación alguna", score: 0 }
+        ]
+      },
+      {
+        text: "Un cliente interrumpe constantemente tu presentación. ¿Cómo manejas la situación?",
+        options: [
+          { text: "Le pides amablemente que te permita terminar la idea para luego responder sus inquietudes", score: 2 },
+          { text: "Adaptas la presentación para responder sus preguntas en el momento en que surgen", score: 1 },
+          { text: "Haces preguntas para entender qué le genera dudas antes de continuar", score: 1 },
+          { text: "Continúas hablando ignorando las interrupciones hasta terminar", score: 0 },
+          { text: "Suspendes la presentación y le cedes toda la palabra sin retomar el hilo", score: 0 }
+        ]
+      },
+      {
+        text: "Necesitas informarle a un cliente que no podrás cumplir lo que prometió un colega. ¿Qué haces?",
+        options: [
+          { text: "Comunicas la situación con honestidad, te disculpas y ofreces una alternativa viable", score: 2 },
+          { text: "Le prometes investigar el caso y contactarlo con una respuesta en un plazo definido", score: 1 },
+          { text: "Le explicas los límites reales de lo posible y buscas la opción más cercana a su expectativa", score: 1 },
+          { text: "Evitas el tema esperando que el cliente no lo recuerde ni lo exija", score: 0 },
+          { text: "Mencionas que fue un error de tu colega para proteger tu imagen ante el cliente", score: 0 }
+        ]
+      },
+      {
+        text: "Al momento de cerrar la venta, el cliente pide condiciones fuera de las políticas. ¿Cómo respondes?",
+        options: [
+          { text: "Explicas con claridad las políticas, escuchas su necesidad y buscas una solución dentro del marco posible", score: 2 },
+          { text: "Preguntas por qué necesita esas condiciones para ver si existe alguna alternativa", score: 1 },
+          { text: "Propones condiciones intermedias que puedas gestionar internamente sin comprometer las políticas", score: 1 },
+          { text: "Aceptas las condiciones sin consultar para no perder la venta", score: 0 },
+          { text: "Rechazas de plano sin explorar ninguna opción alternativa", score: 0 }
+        ]
+      }
+    ];
+
+    /* ============================================================
+       NIVELES DE RESULTADO
+    ============================================================ */
+    const LEVELS = [
+      {
+        min: 8, max: 10,
+        label:     'Nivel alto de comunicación asertiva',
+        badgeClass:'badge-high',
+        feedback:  'Tu estilo de comunicación refleja una alta capacidad para interactuar con clientes de forma clara, empática y orientada a soluciones. Manejas con eficacia las situaciones difíciles sin perder el foco ni la calidad del vínculo. Sigue cultivando estas fortalezas.'
+      },
+      {
+        min: 5, max: 7,
+        label:     'Nivel intermedio de comunicación asertiva',
+        badgeClass:'badge-mid',
+        feedback:  'Tienes una base sólida de comunicación asertiva, pero existen oportunidades de mejora en situaciones de mayor tensión o complejidad. Con práctica consciente y retroalimentación continua, puedes alcanzar un nivel alto de manera progresiva.'
+      },
+      {
+        min: 0, max: 4,
+        label:     'Nivel bajo de comunicación asertiva',
+        badgeClass:'badge-low',
+        feedback:  'Tu comunicación con clientes presenta áreas importantes de desarrollo. Fortalecer la escucha activa, la claridad en el mensaje y el manejo emocional te permitirá transformar de forma significativa tu efectividad comercial y la calidad de tus relaciones con clientes.'
+      }
+    ];
+
+    /* ============================================================
+       ESTADO DEL CUESTIONARIO
+    ============================================================ */
+    let state = {
+      currentQ:   0,
+      totalScore: 0,
+      userName:   '',
+      questions:  []   // preguntas con opciones barajadas
+    };
+
+    /* ============================================================
+       UTILIDADES
+    ============================================================ */
+
+    /** Baraja un arreglo (Fisher-Yates) sin mutar el original. */
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    /** Activa la pantalla indicada con animación. */
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+      });
+      const el = document.getElementById(id);
+      el.classList.add('active');
+    }
+
+    /** Formatea la fecha actual como DD/MM/AAAA. */
+    function today() {
+      return new Date().toLocaleDateString('es-BO', {
+        day: '2-digit', month: '2-digit', year: 'numeric'
+      });
+    }
+
+    /** Formatea la hora actual como HH:MM. */
+    function currentTime() {
+      return new Date().toLocaleTimeString('es-BO', {
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+
+    /* ============================================================
+       INICIO DEL CUESTIONARIO
+    ============================================================ */
+    function startQuiz() {
+      const input = document.getElementById('input-name');
+      const name  = input.value.trim();
+
+      /* Validación del nombre */
+      if (!name) {
+        input.classList.add('error');
+        input.placeholder = 'Por favor, ingresa tu nombre';
+        input.focus();
+        setTimeout(() => {
+          input.classList.remove('error');
+          input.placeholder = 'Ej.: María García';
+        }, 2800);
+        return;
+      }
+
+      /* Inicializar estado */
+      state.userName   = name;
+      state.currentQ   = 0;
+      state.totalScore = 0;
+
+      /* Barajar las opciones de cada pregunta (el orden de preguntas es fijo) */
+      state.questions = QUESTIONS.map(q => ({
+        ...q,
+        options: shuffle(q.options)
+      }));
+
+      showScreen('screen-question');
+      renderQuestion();
+    }
+
+    /* ============================================================
+       RENDERIZADO DE PREGUNTA
+    ============================================================ */
+    function renderQuestion() {
+      const q      = state.questions[state.currentQ];
+      const total  = state.questions.length;
+      const idx    = state.currentQ;
+      const labels = ['A', 'B', 'C', 'D', 'E'];
+
+      /* Barra de progreso */
+      document.getElementById('progress-count').textContent =
+        `${idx + 1} de ${total}`;
+      document.getElementById('progress-fill').style.width =
+        `${(idx / total) * 100}%`;
+
+      /* Texto de la pregunta */
+      document.getElementById('q-label').textContent = `Pregunta ${idx + 1}`;
+      document.getElementById('q-text').textContent  = q.text;
+
+      /* Opciones */
+      const list = document.getElementById('options-list');
+      list.innerHTML = '';
+
+      q.options.forEach((opt, i) => {
+        const item = document.createElement('div');
+        item.className = 'option-item';
+        item.innerHTML = `
+          <div class="opt-marker">${labels[i]}</div>
+          <p class="opt-text">${opt.text}</p>
+        `;
+        item.addEventListener('click', () => selectOption(item, opt.score));
+        list.appendChild(item);
+      });
+
+      /* Reanimar la tarjeta */
+      const card = document.getElementById('question-card');
+      card.style.animation = 'none';
+      void card.offsetHeight; /* reflow para reiniciar animación */
+      card.style.animation = '';
+    }
+
+    /* ============================================================
+       SELECCIÓN DE OPCIÓN
+    ============================================================ */
+    function selectOption(el, score) {
+      /* Marcar opción elegida */
+      el.classList.add('selected');
+
+      /* Bloquear todas las opciones */
+      document.querySelectorAll('.option-item').forEach(item => {
+        item.style.pointerEvents = 'none';
+        if (item !== el) item.style.opacity = '0.38';
+      });
+
+      /* Acumular puntaje (oculto al usuario) */
+      state.totalScore += score;
+
+      /* Avanzar automáticamente */
+      setTimeout(() => {
+        state.currentQ++;
+        if (state.currentQ < state.questions.length) {
+          renderQuestion();
+        } else {
+          showResults();
+        }
+      }, 500);
+    }
+
+    /* ============================================================
+       PANTALLA DE RESULTADOS
+    ============================================================ */
+    function showResults() {
+      const score = state.totalScore;
+
+      /* Determinar nivel */
+      const level = LEVELS.find(l => score >= l.min && score <= l.max);
+
+      /* Actualizar interfaz */
+      document.getElementById('res-name').textContent    = state.userName;
+      document.getElementById('res-score').textContent   = score;
+      document.getElementById('res-feedback').textContent = level.feedback;
+
+      const badge = document.getElementById('level-badge');
+      badge.className = `level-badge ${level.badgeClass}`;
+      badge.innerHTML = `
+        <span class="level-dot"></span>
+        <span id="level-text">${level.label}</span>
+      `;
+
+      /* Actualizar barra de progreso a 100% antes de cambiar pantalla */
+      document.getElementById('progress-fill').style.width = '100%';
+
+      /* Generar JSON */
+      buildJson(score, level.label);
+
+      /* Mostrar pantalla */
+      showScreen('screen-results');
+    }
+
+    /* ============================================================
+       GENERACIÓN Y RENDERIZADO DEL JSON
+    ============================================================ */
+    function buildJson(score, levelLabel) {
+      /* Objeto de datos del resultado */
+      const data = {
+        id_usuario:      "",
+        bin:             "",
+        nombre:          state.userName,
+        puntaje_obtenido: score,
+        puntaje_maximo:  10,
+        nivel_alcanzado: levelLabel,
+        fecha:           today(),
+        hora:            currentTime()
+      };
+
+      /* Renderizar con sintaxis coloreada */
+      renderColoredJson(data);
+
+      /* Guardar en variable global para copiado */
+      window._jsonData = data;
+    }
+
+    /** Renderiza JSON con resaltado de sintaxis básico. */
+    function renderColoredJson(data) {
+      const lines = [];
+      const entries = Object.entries(data);
+
+      lines.push('<span class="jp">{</span>');
+      entries.forEach(([k, v], i) => {
+        const comma = i < entries.length - 1 ? ',' : '';
+        const valHtml = typeof v === 'number'
+          ? `<span class="jn">${v}</span>`
+          : `<span class="js">"${v}"</span>`;
+        lines.push(
+          `  <span class="jk">"${k}"</span>: ${valHtml}${comma}`
+        );
+      });
+      lines.push('<span class="jp">}</span>');
+
+      document.getElementById('json-output').innerHTML = lines.join('\n');
+    }
+
+    /* ============================================================
+       COPIAR JSON AL PORTAPAPELES
+    ============================================================ */
+    function copyJson() {
+      const text = JSON.stringify(window._jsonData, null, 2);
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        const orig = btn.innerHTML;
+        btn.innerHTML  = '<span>✓</span> Copiado';
+        btn.style.color       = 'var(--accent)';
+        btn.style.borderColor = 'var(--accent)';
+        btn.style.background  = 'var(--accent-soft)';
+        setTimeout(() => {
+          btn.innerHTML = orig;
+          btn.style.color = btn.style.borderColor = btn.style.background = '';
+        }, 2200);
+      }).catch(() => {
+        /* Fallback para entornos sin acceso al portapapeles */
+        const ta = document.createElement('textarea');
+        ta.value = JSON.stringify(window._jsonData, null, 2);
+        ta.style.position = 'fixed';
+        ta.style.opacity  = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      });
+    }
+
+    /* ============================================================
+       ATAJOS DE TECLADO
+    ============================================================ */
+    document.getElementById('input-name').addEventListener('keydown', e => {
+      if (e.key === 'Enter') startQuiz();
+    });
+
+  </script>
+
+</body>
+</html>
