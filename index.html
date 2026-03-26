@@ -483,70 +483,63 @@
       margin-bottom: 36px;
     }
 
-    /* Sección JSON */
-    .json-section { border-top: 1px solid var(--border); padding-top: 28px; }
+    /* Sección de análisis y recomendaciones */
+    .action-section {
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+      margin-top: 4px;
+    }
 
-    .json-title {
+    .action-title {
       font-size: 10.5px;
       font-weight: 600;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--text-3);
-      margin-bottom: 6px;
+      margin-bottom: 12px;
     }
 
-    .json-hint {
-      font-size: 12.5px;
-      color: var(--text-3);
-      margin-bottom: 14px;
-      line-height: 1.5;
-    }
-
-    .json-hint strong {
+    .action-analysis {
+      font-size: 13.5px;
+      line-height: 1.68;
       color: var(--text-2);
-      font-weight: 500;
+      margin-bottom: 18px;
+      font-style: italic;
     }
 
-    .json-block {
-      background: #f2f0eb;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px 22px;
-      font-family: 'Courier New', 'Lucida Console', Consolas, monospace;
-      font-size: 12.5px;
-      line-height: 1.75;
+    .action-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .action-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--accent);
+    }
+
+    .action-icon {
+      font-size: 16px;
+      line-height: 1.3;
+      flex-shrink: 0;
+    }
+
+    .action-text {
+      font-size: 13.5px;
+      line-height: 1.55;
       color: var(--text-1);
-      white-space: pre;
-      overflow-x: auto;
     }
 
-    /* Sintaxis JSON */
-    .jk { color: #2c5f4a; }        /* key */
-    .js { color: #8b4513; }        /* string */
-    .jn { color: #1a5fa0; }        /* number */
-    .jp { color: var(--text-3); }  /* punctuation */
-
-    .copy-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      margin-top: 12px;
-      padding: 8px 16px;
-      background: transparent;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      font-family: var(--font-body);
-      font-size: 12.5px;
-      font-weight: 500;
-      color: var(--text-2);
-      cursor: pointer;
-      transition: all var(--dur) var(--ease);
-    }
-
-    .copy-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: var(--accent-soft);
+    .action-text strong {
+      font-weight: 600;
+      color: var(--accent-dark);
+      display: block;
+      margin-bottom: 2px;
     }
 
     /* ============================================================
@@ -571,7 +564,7 @@
       .metrics        { gap: 0; padding: 16px 4px; }
       .metric-val     { font-size: 24px; }
       .score-num      { font-size: 64px; }
-      .json-block     { font-size: 11.5px; padding: 16px 16px; }
+
     }
   </style>
 </head>
@@ -685,17 +678,11 @@
 
           <p class="res-feedback" id="res-feedback"></p>
 
-          <!-- Bloque JSON -->
-          <div class="json-section">
-            <p class="json-title">Datos del resultado · Integración con base de datos</p>
-            <p class="json-hint">
-              Los campos <strong>id_usuario</strong> y <strong>bin</strong>
-              están vacíos para completar manualmente antes de enviar a la base de datos.
-            </p>
-            <div class="json-block" id="json-output"></div>
-            <button class="copy-btn" onclick="copyJson()">
-              <span>⎘</span> Copiar JSON
-            </button>
+          <!-- Sección de análisis y recomendaciones -->
+          <div class="action-section" id="action-section">
+            <p class="action-title">Análisis y recomendaciones</p>
+            <p class="action-analysis" id="action-analysis"></p>
+            <div class="action-list" id="action-list"></div>
           </div>
 
         </div>
@@ -786,19 +773,37 @@
         min: 8, max: 10,
         label:     'Nivel alto de comunicación asertiva',
         badgeClass:'badge-high',
-        feedback:  'Tu estilo de comunicación refleja una alta capacidad para interactuar con clientes de forma clara, empática y orientada a soluciones. Manejas con eficacia las situaciones difíciles sin perder el foco ni la calidad del vínculo. Sigue cultivando estas fortalezas.'
+        feedback:  'Tu estilo de comunicación refleja una alta capacidad para interactuar con clientes de forma clara, empática y orientada a soluciones. Manejas con eficacia las situaciones difíciles sin perder el foco ni la calidad del vínculo. Sigue cultivando estas fortalezas.',
+        analysis:  'Tu desempeño indica un perfil consolidado en comunicación asertiva. Tus respuestas demuestran equilibrio entre firmeza y empatía, manejo eficaz de situaciones complejas y orientación genuina hacia el cliente.',
+        actions: [
+          { icon: '🎯', title: 'Comparte tu experiencia', text: 'Conviértete en referente interno: comparte tus buenas prácticas con tu equipo a través de casos reales o sesiones de retroalimentación.' },
+          { icon: '📈', title: 'Eleva el desafío', text: 'Busca escenarios de mayor complejidad o nuevos tipos de clientes para seguir desarrollando tu capacidad de adaptación.' },
+          { icon: '🤝', title: 'Mentoreo', text: 'Considera acompañar a colegas con niveles de desarrollo más básico: el mentoreo también fortalece las propias habilidades.' }
+        ]
       },
       {
         min: 5, max: 7,
         label:     'Nivel intermedio de comunicación asertiva',
         badgeClass:'badge-mid',
-        feedback:  'Tienes una base sólida de comunicación asertiva, pero existen oportunidades de mejora en situaciones de mayor tensión o complejidad. Con práctica consciente y retroalimentación continua, puedes alcanzar un nivel alto de manera progresiva.'
+        feedback:  'Tienes una base sólida de comunicación asertiva, pero existen oportunidades de mejora en situaciones de mayor tensión o complejidad. Con práctica consciente y retroalimentación continua, puedes alcanzar un nivel alto de manera progresiva.',
+        analysis:  'Tus respuestas reflejan buenas intenciones y algunos recursos adecuados, aunque en situaciones de alta presión tiendes a optar por la comodidad antes que por la asertividad. El desarrollo está al alcance con práctica dirigida.',
+        actions: [
+          { icon: '🎭', title: 'Practica con role-playing', text: 'Simula situaciones difíciles con un colega o tutor: escenas de clientes agresivos, objeciones de precio o incumplimientos de promesas.' },
+          { icon: '💬', title: 'Solicita retroalimentación', text: 'Después de interacciones complejas, pide opinión a tu líder o a un par de confianza sobre cómo podrías haber comunicado mejor.' },
+          { icon: '📚', title: 'Refuerza la escucha activa', text: 'Trabaja específicamente en técnicas de escucha activa y validación emocional: son el pilar que separa el nivel intermedio del alto.' }
+        ]
       },
       {
         min: 0, max: 4,
         label:     'Nivel bajo de comunicación asertiva',
         badgeClass:'badge-low',
-        feedback:  'Tu comunicación con clientes presenta áreas importantes de desarrollo. Fortalecer la escucha activa, la claridad en el mensaje y el manejo emocional te permitirá transformar de forma significativa tu efectividad comercial y la calidad de tus relaciones con clientes.'
+        feedback:  'Tu comunicación con clientes presenta áreas importantes de desarrollo. Fortalecer la escucha activa, la claridad en el mensaje y el manejo emocional te permitirá transformar de forma significativa tu efectividad comercial y la calidad de tus relaciones con clientes.',
+        analysis:  'Los resultados indican que frente a situaciones de tensión o exigencia, la comunicación tiende a ser evasiva, reactiva o poco empática. Esto puede afectar la confianza del cliente y el cierre efectivo de ventas.',
+        actions: [
+          { icon: '🏫', title: 'Capacitación estructurada', text: 'Inscríbete en un taller o programa de comunicación asertiva: necesitas una base sólida antes de practicar en situaciones reales.' },
+          { icon: '🧭', title: 'Acompañamiento con un tutor', text: 'Trabaja con un coach o líder de referencia que pueda guiarte en el manejo de situaciones difíciles con clientes, con retroalimentación directa.' },
+          { icon: '🔁', title: 'Revisión de casos reales', text: 'Analiza interacciones pasadas con tu equipo: identifica qué dijiste, qué podría haberse dicho mejor y practica la respuesta correcta en voz alta.' }
+        ]
       }
     ];
 
@@ -833,20 +838,6 @@
       });
       const el = document.getElementById(id);
       el.classList.add('active');
-    }
-
-    /** Formatea la fecha actual como DD/MM/AAAA. */
-    function today() {
-      return new Date().toLocaleDateString('es-BO', {
-        day: '2-digit', month: '2-digit', year: 'numeric'
-      });
-    }
-
-    /** Formatea la hora actual como HH:MM. */
-    function currentTime() {
-      return new Date().toLocaleTimeString('es-BO', {
-        hour: '2-digit', minute: '2-digit'
-      });
     }
 
     /* ============================================================
@@ -975,83 +966,23 @@
       /* Actualizar barra de progreso a 100% antes de cambiar pantalla */
       document.getElementById('progress-fill').style.width = '100%';
 
-      /* Generar JSON */
-      buildJson(score, level.label);
+      /* Poblar sección de análisis y recomendaciones */
+      document.getElementById('action-analysis').textContent = level.analysis;
+
+      const actionList = document.getElementById('action-list');
+      actionList.innerHTML = '';
+      level.actions.forEach(a => {
+        const item = document.createElement('div');
+        item.className = 'action-item';
+        item.innerHTML = `
+          <span class="action-icon">${a.icon}</span>
+          <p class="action-text"><strong>${a.title}</strong>${a.text}</p>
+        `;
+        actionList.appendChild(item);
+      });
 
       /* Mostrar pantalla */
       showScreen('screen-results');
-    }
-
-    /* ============================================================
-       GENERACIÓN Y RENDERIZADO DEL JSON
-    ============================================================ */
-    function buildJson(score, levelLabel) {
-      /* Objeto de datos del resultado */
-      const data = {
-        id_usuario:      "",
-        bin:             "",
-        nombre:          state.userName,
-        puntaje_obtenido: score,
-        puntaje_maximo:  10,
-        nivel_alcanzado: levelLabel,
-        fecha:           today(),
-        hora:            currentTime()
-      };
-
-      /* Renderizar con sintaxis coloreada */
-      renderColoredJson(data);
-
-      /* Guardar en variable global para copiado */
-      window._jsonData = data;
-    }
-
-    /** Renderiza JSON con resaltado de sintaxis básico. */
-    function renderColoredJson(data) {
-      const lines = [];
-      const entries = Object.entries(data);
-
-      lines.push('<span class="jp">{</span>');
-      entries.forEach(([k, v], i) => {
-        const comma = i < entries.length - 1 ? ',' : '';
-        const valHtml = typeof v === 'number'
-          ? `<span class="jn">${v}</span>`
-          : `<span class="js">"${v}"</span>`;
-        lines.push(
-          `  <span class="jk">"${k}"</span>: ${valHtml}${comma}`
-        );
-      });
-      lines.push('<span class="jp">}</span>');
-
-      document.getElementById('json-output').innerHTML = lines.join('\n');
-    }
-
-    /* ============================================================
-       COPIAR JSON AL PORTAPAPELES
-    ============================================================ */
-    function copyJson() {
-      const text = JSON.stringify(window._jsonData, null, 2);
-      navigator.clipboard.writeText(text).then(() => {
-        const btn = document.querySelector('.copy-btn');
-        const orig = btn.innerHTML;
-        btn.innerHTML  = '<span>✓</span> Copiado';
-        btn.style.color       = 'var(--accent)';
-        btn.style.borderColor = 'var(--accent)';
-        btn.style.background  = 'var(--accent-soft)';
-        setTimeout(() => {
-          btn.innerHTML = orig;
-          btn.style.color = btn.style.borderColor = btn.style.background = '';
-        }, 2200);
-      }).catch(() => {
-        /* Fallback para entornos sin acceso al portapapeles */
-        const ta = document.createElement('textarea');
-        ta.value = JSON.stringify(window._jsonData, null, 2);
-        ta.style.position = 'fixed';
-        ta.style.opacity  = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-      });
     }
 
     /* ============================================================
